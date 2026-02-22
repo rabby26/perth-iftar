@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perth Iftar Guide - Ramadan Mubarak</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #2e7d32;
+            --accent-gold: #d4a017;
+            --light-beige: #f5f0e1;
+            --dark-brown: #5d4037;
+            --soft-cream: #fff8e1;
+            --highlight-teal: #00695c;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, var(--light-beige), #e0d9c3);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            background: var(--primary-green);
+            color: white;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "🌙 ★ رمضان مبارك ★ 🌙";
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            font-size: 1.8rem;
+            opacity: 0.15;
+            color: var(--accent-gold);
+            font-family: 'Amiri', serif;
+            letter-spacing: 8px;
+        }
+
+        h1 {
+            font-family: 'Amiri', serif;
+            margin: 0;
+            font-size: 3rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .time-display {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            border: 2px solid var(--accent-gold);
+        }
+
+        #current-time, #iftar-time {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--accent-gold);
+        }
+
+        .note {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        section {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            color: var(--primary-green);
+            border-bottom: 3px solid var(--accent-gold);
+            padding-bottom: 10px;
+            font-family: 'Amiri', serif;
+            font-size: 2.2rem;
+            text-align: center;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        li {
+            background: var(--soft-cream);
+            border: 1px solid #e0d0b0;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(46,125,50,0.2);
+        }
+
+        .location-name {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: var(--dark-brown);
+            margin-bottom: 6px;
+        }
+
+        .location-address a {
+            color: var(--highlight-teal);
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .location-address a:hover {
+            text-decoration: underline;
+        }
+
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            max-width: 600px;
+            margin: 40px auto;
+            border: 2px dashed var(--highlight-teal);
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 8px;
+            font-weight: 500;
+            color: var(--dark-brown);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: var(--primary-green);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 20px auto 0;
+        }
+
+        button:hover {
+            background: #1b5e20;
+            transform: scale(1.05);
+        }
+
+        .ramadan-icon {
+            font-size: 2.5rem;
+            margin: 0 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: var(--primary-green);
+            color: white;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.4rem; }
+            .time-display { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Perth Iftar Guide <span class="ramadan-icon">🌙</span> رمضان مبارك</h1>
+        <p>Find your way through the blessed month in Perth</p>
+
+        <div class="time-display">
+            <p>Live Time in Perth: <span id="current-time">Loading...</span></p>
+            <p>Iftar (Maghrib) Today: <span id="iftar-time">Loading...</span></p>
+            <p class="note">Times based on observed local timing (starting 19:04 on Feb 22) and approximate daily decrease – always confirm with your local mosque or trusted app 🤲</p>
+        </div>
+
+        <p style="font-size: 1.1rem; opacity: 0.9;">
+            May Allah accept our fasts and grant us His mercy this Ramadan 2026
+        </p>
+    </header>
+
+    <section id="free-iftar">
+        <h2>Free Iftar Locations in Perth</h2>
+        <ul id="iftar-list">
+            <li>
+                <div class="location-name">Curtin Musallah</div>
+                <div class="location-address">
+                    <a href="https://www.google.com/maps/search/?api=1&query=510,+Bentley+WA+6102" target="_blank">510, Bentley WA 6102</a>
+                </div>
+            </li>
+            <li>
+                <div class="location-name">Perth City Mosque</div>
+                <div class="location-address">
+                    <a href="https://www.google.com/maps/search/?api=1&query=427+William+St,+Perth+WA+6000" target="_blank">427 William St, Perth WA 6000</a>
+                </div>
+            </li>
+            <li>
+                <div class="location-name">Furqan Islamic Association</div>
+                <div class="location-address">
+                    <a href="https://www.google.com/maps/search/?api=1&query=91+Robinson+Ave,+Belmont+WA+6104" target="_blank">91 Robinson Ave, Belmont WA 6104</a>
+                </div>
+            </li>
+            <li>
+                <div class="location-name">Kenwick Musallah</div>
+                <div class="location-address">
+                    <a href="https://www.google.com/maps/search/?api=1&query=404+Bickley+Rd,+Kenwick+WA+6107" target="_blank">404 Bickley Rd, Kenwick WA 6107</a>
+                </div>
+            </li>
+            <li>
+                <div class="location-name">Armadale Mosque (AMIC)</div>
+                <div class="location-address">
+                    <a href="https://www.google.com/maps/search/?api=1&query=7+Albany+Hwy,+Armadale+WA+6112" target="_blank">7 Albany Hwy, Armadale WA 6112</a>
+                </div>
+            </li>
+            <li>
+                <div class="location-name">IQRO Centre Perth</div>
+                <div class="location-address">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Shop+2/45+Kent+St,+Cannington+WA+6107" target="_blank">Shop 2/45 Kent St, Cannington WA 6107</a>
+                </div>
+            </li>
+            <li>
+                <div class="location-name">Ar Rukun Mosque</div>
+                <div class="location-address">
+                    <a href="https://www.google.com/maps/search/?api=1&query=4+Attwood+Way,+Rockingham+WA+6168" target="_blank">4 Attwood Way, Rockingham WA 6168</a>
+                </div>
+            </li>
+            <li>
+                <div class="location-name">Rivervale Mashjid</div>
+                <div class="location-address">
+                    <a href="https://www.google.com/maps/search/?api=1&query=9+Rowe+Ave,+Rivervale+WA+6103" target="_blank">9 Rowe Ave, Rivervale WA 6103</a>
+                </div>
+            </li>
+            <li>
+                <div class="location-name">Krunch & Munch Cafe</div>
+                <div class="location-address">
+                    <a href="https://www.google.com/maps/search/?api=1&query=36+Welshpool+Rd,+Welshpool+WA+6106" target="_blank">36 Welshpool Rd, Welshpool WA 6106</a>
+                </div>
+            </li>
+            <li>
+                <div class="location-name">Murdoch University Musalla</div>
+                <div class="location-address">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Room+EH1+.009.+Education+and+humanities+building,+Broadwalk,+Murdoch+WA+6150" target="_blank">Room EH1 .009. Education and humanities building, Broadwalk, Murdoch WA 6150</a>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <section id="restaurants">
+        <h2>Halal Restaurants in Perth</h2>
+        <ul id="restaurant-list">
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Chakra+Restaurant+Inglewood+Perth" target="_blank">Chakra Restaurant</a>
+                </div>
+                <div class="cuisine">Indian cuisine in Inglewood</div>
+            </li>
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=The+Prophet+East+Victoria+Park+Perth" target="_blank">The Prophet</a>
+                </div>
+                <div class="cuisine">Lebanese and Mediterranean in East Victoria Park</div>
+            </li>
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Elie%27s+Tent+Lebanese+Restaurant+Victoria+Park+Perth" target="_blank">Elie's Tent Lebanese Restaurant</a>
+                </div>
+                <div class="cuisine">Lebanese in Victoria Park</div>
+            </li>
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Tagine+Leederville+Perth" target="_blank">Tagine</a>
+                </div>
+                <div class="cuisine">Moroccan in Leederville</div>
+            </li>
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=The+Roti+King+Perth" target="_blank">The Roti King</a>
+                </div>
+                <div class="cuisine">Malaysian/Indian in Perth CBD</div>
+            </li>
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Maroosh+Ascot+Perth" target="_blank">Maroosh</a>
+                </div>
+                <div class="cuisine">Lebanese in Ascot</div>
+            </li>
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Bawarchi+Biryani+House+Victoria+Park+Perth" target="_blank">Bawarchi Biryani House</a>
+                </div>
+                <div class="cuisine">Indian in Victoria Park</div>
+            </li>
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Insan%27s+Cafe+Murray+Street+Perth" target="_blank">Insan's Café</a>
+                </div>
+                <div class="cuisine">Malay cuisine on Murray St, Perth CBD</div>
+            </li>
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Kailis+Fish+Market+Cafe+Fremantle" target="_blank">Kailis Fish Market Café</a>
+                </div>
+                <div class="cuisine">Seafood in Fremantle Fishing Boat Harbour</div>
+            </li>
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Big+Booley%27s+Perth" target="_blank">Big Booley's</a>
+                </div>
+                <div class="cuisine">Various halal options in Perth area</div>
+            </li>
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=MOMO+Dessert+Cafe+Perth" target="_blank">MOMO Dessert Cafe</a>
+                </div>
+                <div class="cuisine">Desserts and cafe in Perth</div>
+            </li>
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=D%27Angkasa+Malaysian+Restaurant+Perth" target="_blank">D'Angkasa Malaysian Restaurant</a>
+                </div>
+                <div class="cuisine">Malaysian in Perth area</div>
+            </li>
+            <li>
+                <div class="restaurant-name">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Charcoal+Loco+Perth" target="_blank">Charcoal Loco</a>
+                </div>
+                <div class="cuisine">South American style in Perth</div>
+            </li>
+        </ul>
+    </section>
+
+    <section id="submit-form">
+        <h2>Share Your Suggestions</h2>
+        <p>Help the community by suggesting more halal restaurants or free Iftar locations.</p>
+        
+        <form id="suggestion-form" action="https://formspree.io/f/mykdnvdo" method="POST">
+            <label for="name">Your Name:</label>
+            <input type="text" name="name" id="name" required>
+
+            <label for="type">Suggestion Type:</label>
+            <select name="type" id="type" required>
+                <option value="restaurant">Halal Restaurant</option>
+                <option value="iftar">Free Iftar Location</option>
+            </select>
+
+            <label for="details">Details (Name, Address, Description):</label>
+            <textarea name="details" id="details" rows="5" required></textarea>
+
+            <!-- Makes the email subject clear -->
+            <input type="hidden" name="_subject" value="New Suggestion from Perth Iftar Guide">
+
+            <button type="submit">Submit Suggestion</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>🌟 Perth Iftar Guide | Serving the Muslim community during Ramadan 2026 🌟</p>
+        <p>May this Ramadan bring peace, blessings, and beautiful iftars for all 🤲</p>
+    </footer>
+
+    <script>
+        // Live Perth time (AWST UTC+8)
+        function updateTime() {
+            const now = new Date();
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const perthTime = new Date(utc + (3600000 * 8));
+            document.getElementById('current-time').textContent = 
+                perthTime.toLocaleTimeString('en-AU', { 
+                    timeZone: 'Australia/Perth', 
+                    hour: '2-digit', minute: '2-digit', second: '2-digit', 
+                    hour12: true 
+                });
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Simulated Iftar time: starts at 19:04 on Feb 22, 2026 and decreases by 1 minute per day
+        function getIftarTime() {
+            const baseDate = new Date(2026, 1, 22); // February 22, 2026
+            const baseMinutes = 19 * 60 + 4;       // 19:04
+
+            const now = new Date();
+            const daysSinceBase = Math.floor((now - baseDate) / (1000 * 60 * 60 * 24));
+
+            if (daysSinceBase < 0) {
+                document.getElementById('iftar-time').textContent = 'Ramadan has not started yet';
+                return;
+            }
+
+            let totalMinutes = baseMinutes - daysSinceBase;
+            if (totalMinutes < 0) totalMinutes = 0;
+
+            const hour = Math.floor(totalMinutes / 60);
+            const minute = totalMinutes % 60;
+
+            const timeStr = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')} AWST`;
+            document.getElementById('iftar-time').textContent = timeStr;
+        }
+
+        getIftarTime();
+        setInterval(getIftarTime, 60000);
+
+        // Optional: show a friendly message before Formspree takes over
+        document.getElementById('suggestion-form').addEventListener('submit', function(e) {
+            alert('JazakAllah khair! Your suggestion is being sent...');
+        });
+    </script>
+</body>
+</html>
