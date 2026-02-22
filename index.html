@@ -201,7 +201,7 @@
         <div class="time-display">
             <p>Live Time in Perth: <span id="current-time">Loading...</span></p>
             <p>Iftar (Maghrib) Today: <span id="iftar-time">Loading...</span></p>
-            <p class="note">Times based on observed local timing (starting 19:04 on Feb 22) and approximate daily decrease – always confirm with your local mosque or trusted app 🤲</p>
+            <p class="note">Times based on observed local timing and approximate daily decrease. Always confirm with your local mosque or trusted app 🤲</p>
         </div>
 
         <p style="font-size: 1.1rem; opacity: 0.9;">
@@ -376,7 +376,6 @@
             <label for="details">Details (Name, Address, Description):</label>
             <textarea name="details" id="details" rows="5" required></textarea>
 
-            <!-- Makes the email subject clear -->
             <input type="hidden" name="_subject" value="New Suggestion from Perth Iftar Guide">
 
             <button type="submit">Submit Suggestion</button>
@@ -389,7 +388,7 @@
     </footer>
 
     <script>
-        // Live Perth time (AWST UTC+8)
+        // Live Perth time (AWST UTC+8) – already in 12-hour format
         function updateTime() {
             const now = new Date();
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
@@ -404,10 +403,10 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        // Simulated Iftar time: starts at 19:04 on Feb 22, 2026 and decreases by 1 minute per day
+        // Simulated Iftar time in 12-hour format
         function getIftarTime() {
             const baseDate = new Date(2026, 1, 22); // February 22, 2026
-            const baseMinutes = 19 * 60 + 4;       // 19:04
+            const baseMinutes = 19 * 60 + 4;       // 19:04 in minutes past midnight
 
             const now = new Date();
             const daysSinceBase = Math.floor((now - baseDate) / (1000 * 60 * 60 * 24));
@@ -420,17 +419,21 @@
             let totalMinutes = baseMinutes - daysSinceBase;
             if (totalMinutes < 0) totalMinutes = 0;
 
-            const hour = Math.floor(totalMinutes / 60);
+            const hour24 = Math.floor(totalMinutes / 60);
             const minute = totalMinutes % 60;
 
-            const timeStr = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')} AWST`;
+            const period = hour24 >= 12 ? 'PM' : 'AM';
+            let hour12 = hour24 % 12;
+            if (hour12 === 0) hour12 = 12;
+
+            const timeStr = `${hour12}:${minute.toString().padStart(2, '0')} ${period} AWST`;
             document.getElementById('iftar-time').textContent = timeStr;
         }
 
         getIftarTime();
         setInterval(getIftarTime, 60000);
 
-        // Optional: show a friendly message before Formspree takes over
+        // Form submission alert (Formspree handles the send)
         document.getElementById('suggestion-form').addEventListener('submit', function(e) {
             alert('JazakAllah khair! Your suggestion is being sent...');
         });
